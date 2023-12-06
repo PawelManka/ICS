@@ -7,9 +7,9 @@
  *
  * Code generation for model "rpdriver_with_nn".
  *
- * Model version              : 1.350
+ * Model version              : 1.353
  * Simulink Coder version : 9.0 (R2018b) 24-May-2018
- * C source code generated on : Wed Dec  6 10:53:50 2023
+ * C source code generated on : Wed Dec  6 11:10:19 2023
  *
  * Target selection: rtcon_rpend_usb2.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -72,419 +72,483 @@ void rpdriver_with_nn_step(void)
 {
   /* local block i/o variables */
   real_T rtb_Memory;
-  real_T rtb_Memory1;
-  real_T rtb_Sum1_d_idx_0;
 
-  /* S-Function (rtdacusb2_rpend_dd): '<S1>/S-Function' */
-
-  /* Level2 S-Function Block: '<S1>/S-Function' (rtdacusb2_rpend_dd) */
   {
-    SimStruct *rts = rpdriver_with_nn_M->childSfunctions[0];
-    sfcnOutputs(rts,1);
-  }
+    real_T *lastU;
+    real_T rtb_Memory1;
+    real_T rtb_Sum1_d_idx_0;
 
-  /* Gain: '<S1>/Pendulum Convert to rad' */
-  rpdriver_with_nn_B.PendulumAnglerad =
-    rpdriver_with_nn_P.PendulumConverttorad_Gain *
-    rpdriver_with_nn_B.SFunction_o2;
+    /* S-Function (rtdacusb2_rpend_dd): '<S2>/S-Function' */
 
-  /* Trigonometry: '<S5>/Trigonometric Function' incorporates:
-   *  Trigonometry: '<S5>/Trigonometric Function1'
-   *  Trigonometry: '<S5>/Trigonometric Function2'
-   */
-  rpdriver_with_nn_B.PendPos_ZeroDown = rt_atan2d_snf(sin
-    (rpdriver_with_nn_B.PendulumAnglerad), cos
-    (rpdriver_with_nn_B.PendulumAnglerad));
+    /* Level2 S-Function Block: '<S2>/S-Function' (rtdacusb2_rpend_dd) */
+    {
+      SimStruct *rts = rpdriver_with_nn_M->childSfunctions[0];
+      sfcnOutputs(rts,1);
+    }
 
-  /* Sum: '<S5>/Add' incorporates:
-   *  Constant: '<S5>/Constant'
-   */
-  rtb_Memory1 = rpdriver_with_nn_B.PendulumAnglerad +
-    rpdriver_with_nn_P.Constant_Value;
+    /* Gain: '<S2>/Pendulum Convert to rad' */
+    rpdriver_with_nn_B.PendulumAnglerad =
+      rpdriver_with_nn_P.PendulumConverttorad_Gain *
+      rpdriver_with_nn_B.SFunction_o2;
 
-  /* Trigonometry: '<S5>/Trigonometric Function3' incorporates:
-   *  Trigonometry: '<S5>/Trigonometric Function4'
-   *  Trigonometry: '<S5>/Trigonometric Function5'
-   */
-  rpdriver_with_nn_B.PendPos_ZeroUp = rt_atan2d_snf(sin(rtb_Memory1), cos
-    (rtb_Memory1));
-
-  /* Gain: '<S1>/Gain1' incorporates:
-   *  Memory: '<S1>/Memory'
-   *  Sum: '<S1>/Add'
-   */
-  rpdriver_with_nn_B.Periodms = (rpdriver_with_nn_B.SFunction_o6 -
-    rpdriver_with_nn_DW.Memory_PreviousInput) * rpdriver_with_nn_P.Gain1_Gain_h;
-
-  /* Product: '<S1>/Divide1' incorporates:
-   *  Gain: '<S1>/rad2rad//s'
-   *  Memory: '<S1>/Memory2'
-   *  Sum: '<S1>/Add2'
-   */
-  rpdriver_with_nn_B.PendulumVelrads = (rpdriver_with_nn_B.PendulumAnglerad -
-    rpdriver_with_nn_DW.Memory2_PreviousInput) *
-    rpdriver_with_nn_P.rad2rads_Gain / rpdriver_with_nn_B.Periodms;
-
-  /* Gain: '<S1>/DC Convert to rad' */
-  rpdriver_with_nn_B.DCAnglerad = rpdriver_with_nn_P.DCConverttorad_Gain *
-    rpdriver_with_nn_B.SFunction_o3;
-
-  /* Product: '<S1>/Divide' incorporates:
-   *  Gain: '<S1>/rad2RPM'
-   *  Memory: '<S1>/Memory1'
-   *  Sum: '<S1>/Add1'
-   */
-  rpdriver_with_nn_B.DCVelrads = (rpdriver_with_nn_B.DCAnglerad -
-    rpdriver_with_nn_DW.Memory1_PreviousInput) * rpdriver_with_nn_P.rad2RPM_Gain
-    / rpdriver_with_nn_B.Periodms;
-
-  /* Gain: '<S1>/DC Convert to [A]1' */
-  rpdriver_with_nn_B.DCConverttoA1 = rpdriver_with_nn_P.DCConverttoA1_Gain *
-    rpdriver_with_nn_B.SFunction_o4;
-
-  /* ManualSwitch: '<Root>/Reset Encoders1' incorporates:
-   *  Constant: '<Root>/DC_Ctrl2'
-   */
-  if (rpdriver_with_nn_P.ResetEncoders1_CurrentSetting == 1) {
-    /* ManualSwitch: '<Root>/Reset Encoders2' incorporates:
-     *  Constant: '<Root>/DC_Ctrl1'
-     *  Gain: '<Root>/Gain1'
-     *  Saturate: '<Root>/Saturation'
+    /* Trigonometry: '<S6>/Trigonometric Function' incorporates:
+     *  Trigonometry: '<S6>/Trigonometric Function1'
+     *  Trigonometry: '<S6>/Trigonometric Function2'
      */
-    if (rpdriver_with_nn_P.ResetEncoders2_CurrentSetting == 1) {
-      rtb_Memory1 = rpdriver_with_nn_P.DC_Ctrl1_Value;
-    } else {
-      if (0.0 > rpdriver_with_nn_P.Saturation_UpperSat) {
-        /* Saturate: '<Root>/Saturation' */
-        rtb_Sum1_d_idx_0 = rpdriver_with_nn_P.Saturation_UpperSat;
-      } else if (0.0 < rpdriver_with_nn_P.Saturation_LowerSat) {
-        /* Saturate: '<Root>/Saturation' */
-        rtb_Sum1_d_idx_0 = rpdriver_with_nn_P.Saturation_LowerSat;
+    rpdriver_with_nn_B.PendPos_ZeroDown = rt_atan2d_snf(sin
+      (rpdriver_with_nn_B.PendulumAnglerad), cos
+      (rpdriver_with_nn_B.PendulumAnglerad));
+
+    /* Sum: '<S6>/Add' incorporates:
+     *  Constant: '<S6>/Constant'
+     */
+    rtb_Memory1 = rpdriver_with_nn_B.PendulumAnglerad +
+      rpdriver_with_nn_P.Constant_Value;
+
+    /* Trigonometry: '<S6>/Trigonometric Function3' incorporates:
+     *  Trigonometry: '<S6>/Trigonometric Function4'
+     *  Trigonometry: '<S6>/Trigonometric Function5'
+     */
+    rpdriver_with_nn_B.PendPos_ZeroUp = rt_atan2d_snf(sin(rtb_Memory1), cos
+      (rtb_Memory1));
+
+    /* Gain: '<S2>/Gain1' incorporates:
+     *  Memory: '<S2>/Memory'
+     *  Sum: '<S2>/Add'
+     */
+    rpdriver_with_nn_B.Periodms = (rpdriver_with_nn_B.SFunction_o6 -
+      rpdriver_with_nn_DW.Memory_PreviousInput) *
+      rpdriver_with_nn_P.Gain1_Gain_h;
+
+    /* Product: '<S2>/Divide1' incorporates:
+     *  Gain: '<S2>/rad2rad//s'
+     *  Memory: '<S2>/Memory2'
+     *  Sum: '<S2>/Add2'
+     */
+    rpdriver_with_nn_B.PendulumVelrads = (rpdriver_with_nn_B.PendulumAnglerad -
+      rpdriver_with_nn_DW.Memory2_PreviousInput) *
+      rpdriver_with_nn_P.rad2rads_Gain / rpdriver_with_nn_B.Periodms;
+
+    /* Gain: '<S2>/DC Convert to rad' */
+    rpdriver_with_nn_B.DCAnglerad = rpdriver_with_nn_P.DCConverttorad_Gain *
+      rpdriver_with_nn_B.SFunction_o3;
+
+    /* Product: '<S2>/Divide' incorporates:
+     *  Gain: '<S2>/rad2RPM'
+     *  Memory: '<S2>/Memory1'
+     *  Sum: '<S2>/Add1'
+     */
+    rpdriver_with_nn_B.DCVelrads = (rpdriver_with_nn_B.DCAnglerad -
+      rpdriver_with_nn_DW.Memory1_PreviousInput) *
+      rpdriver_with_nn_P.rad2RPM_Gain / rpdriver_with_nn_B.Periodms;
+
+    /* Gain: '<S2>/DC Convert to [A]1' */
+    rpdriver_with_nn_B.DCConverttoA1 = rpdriver_with_nn_P.DCConverttoA1_Gain *
+      rpdriver_with_nn_B.SFunction_o4;
+
+    /* ManualSwitch: '<Root>/Reset Encoders1' incorporates:
+     *  Constant: '<Root>/DC_Ctrl2'
+     */
+    if (rpdriver_with_nn_P.ResetEncoders1_CurrentSetting == 1) {
+      /* ManualSwitch: '<Root>/Reset Encoders2' incorporates:
+       *  Constant: '<Root>/DC_Ctrl1'
+       *  Gain: '<Root>/Gain1'
+       *  Saturate: '<Root>/Saturation'
+       */
+      if (rpdriver_with_nn_P.ResetEncoders2_CurrentSetting == 1) {
+        rtb_Memory1 = rpdriver_with_nn_P.DC_Ctrl1_Value;
       } else {
-        /* Saturate: '<Root>/Saturation' */
-        rtb_Sum1_d_idx_0 = 0.0;
+        if (0.0 > rpdriver_with_nn_P.Saturation_UpperSat) {
+          /* Saturate: '<Root>/Saturation' */
+          rtb_Sum1_d_idx_0 = rpdriver_with_nn_P.Saturation_UpperSat;
+        } else if (0.0 < rpdriver_with_nn_P.Saturation_LowerSat) {
+          /* Saturate: '<Root>/Saturation' */
+          rtb_Sum1_d_idx_0 = rpdriver_with_nn_P.Saturation_LowerSat;
+        } else {
+          /* Saturate: '<Root>/Saturation' */
+          rtb_Sum1_d_idx_0 = 0.0;
+        }
+
+        rtb_Memory1 = rpdriver_with_nn_P.Gain1_Gain * rtb_Sum1_d_idx_0;
       }
 
-      rtb_Memory1 = rpdriver_with_nn_P.Gain1_Gain * rtb_Sum1_d_idx_0;
+      /* End of ManualSwitch: '<Root>/Reset Encoders2' */
+    } else {
+      rtb_Memory1 = rpdriver_with_nn_P.DC_Ctrl2_Value;
     }
 
-    /* End of ManualSwitch: '<Root>/Reset Encoders2' */
-  } else {
-    rtb_Memory1 = rpdriver_with_nn_P.DC_Ctrl2_Value;
+    /* End of ManualSwitch: '<Root>/Reset Encoders1' */
+
+    /* Gain: '<Root>/Gain3' */
+    rpdriver_with_nn_B.Control = rpdriver_with_nn_P.Gain3_Gain * rtb_Memory1;
+
+    /* Scope: '<Root>/PlotState' */
+    {
+      StructLogVar *svar = (StructLogVar *)
+        rpdriver_with_nn_DW.PlotState_PWORK.LoggedData[0];
+      LogVar *var = svar->signals.values;
+
+      /* time */
+      {
+        double locTime = rpdriver_with_nn_M->Timing.t[1];
+        ;
+        rt_UpdateLogVar((LogVar *)svar->time, &locTime, 0);
+      }
+
+      /* signals */
+      {
+        real_T up0[1];
+        up0[0] = rpdriver_with_nn_B.PendulumAnglerad;
+        rt_UpdateLogVar((LogVar *)var, up0, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up1[1];
+        up1[0] = rpdriver_with_nn_B.PendPos_ZeroDown;
+        rt_UpdateLogVar((LogVar *)var, up1, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up2[1];
+        up2[0] = rpdriver_with_nn_B.PendPos_ZeroUp;
+        rt_UpdateLogVar((LogVar *)var, up2, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up3[1];
+        up3[0] = rpdriver_with_nn_B.PendulumVelrads;
+        rt_UpdateLogVar((LogVar *)var, up3, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up4[1];
+        up4[0] = rpdriver_with_nn_B.DCAnglerad;
+        rt_UpdateLogVar((LogVar *)var, up4, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up5[1];
+        up5[0] = rpdriver_with_nn_B.DCVelrads;
+        rt_UpdateLogVar((LogVar *)var, up5, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up6[1];
+        up6[0] = rpdriver_with_nn_B.DCConverttoA1;
+        rt_UpdateLogVar((LogVar *)var, up6, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up7[1];
+        up7[0] = rpdriver_with_nn_B.Control;
+        rt_UpdateLogVar((LogVar *)var, up7, 0);
+      }
+    }
+
+    /* Memory: '<Root>/Memory' */
+    rtb_Memory = rpdriver_with_nn_DW.Memory_PreviousInput_i;
+
+    /* Gain: '<S22>/range y // range x' */
+    rtb_Memory1 = rpdriver_with_nn_P.mapminmax_ymax -
+      rpdriver_with_nn_P.mapminmax_ymin;
+
+    /* Bias: '<S22>/Add min y' incorporates:
+     *  Bias: '<S22>/Subtract min x'
+     *  Gain: '<S22>/range y // range x'
+     *  Memory: '<Root>/Memory1'
+     */
+    rtb_Sum1_d_idx_0 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax[0] -
+      rpdriver_with_nn_P.mapminmax_xmin[0]) * (rtb_Memory +
+      -rpdriver_with_nn_P.mapminmax_xmin[0]) + rpdriver_with_nn_P.mapminmax_ymin;
+    rtb_Memory1 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax[1] -
+      rpdriver_with_nn_P.mapminmax_xmin[1]) *
+      (rpdriver_with_nn_DW.Memory1_PreviousInput_l +
+       -rpdriver_with_nn_P.mapminmax_xmin[1]) +
+      rpdriver_with_nn_P.mapminmax_ymin;
+
+    /* Bias: '<S23>/Add min x' incorporates:
+     *  Bias: '<S23>/Subtract min y'
+     *  Constant: '<S12>/IW{1,1}(1,:)''
+     *  Constant: '<S12>/IW{1,1}(2,:)''
+     *  Constant: '<S12>/IW{1,1}(3,:)''
+     *  Constant: '<S12>/IW{1,1}(4,:)''
+     *  Constant: '<S13>/one'
+     *  Constant: '<S13>/one1'
+     *  Constant: '<S19>/IW{2,1}(1,:)''
+     *  Constant: '<S7>/b{1}'
+     *  Constant: '<S8>/b{2}'
+     *  DotProduct: '<S14>/Dot Product'
+     *  DotProduct: '<S15>/Dot Product'
+     *  DotProduct: '<S16>/Dot Product'
+     *  DotProduct: '<S17>/Dot Product'
+     *  DotProduct: '<S21>/Dot Product'
+     *  Gain: '<S13>/Gain'
+     *  Gain: '<S13>/Gain1'
+     *  Gain: '<S23>/Divide by range y'
+     *  Math: '<S13>/Exp'
+     *  Math: '<S13>/Reciprocal'
+     *  Sum: '<S13>/Sum'
+     *  Sum: '<S13>/Sum1'
+     *  Sum: '<S7>/netsum'
+     *  Sum: '<S8>/netsum'
+     *
+     * About '<S13>/Exp':
+     *  Operator: exp
+     *
+     * About '<S13>/Reciprocal':
+     *  Operator: reciprocal
+     */
+    rpdriver_with_nn_B.Addminx = ((((((1.0 / (exp
+      (((rpdriver_with_nn_P.IW111_Value[0] * rtb_Sum1_d_idx_0 +
+         rpdriver_with_nn_P.IW111_Value[1] * rtb_Memory1) +
+        rpdriver_with_nn_P.b1_Value[0]) * rpdriver_with_nn_P.Gain_Gain) +
+      rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
+      rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[0] + (1.0 /
+      (exp(((rpdriver_with_nn_P.IW112_Value[0] * rtb_Sum1_d_idx_0 +
+             rpdriver_with_nn_P.IW112_Value[1] * rtb_Memory1) +
+            rpdriver_with_nn_P.b1_Value[1]) * rpdriver_with_nn_P.Gain_Gain) +
+       rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
+      rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[1]) + (1.0
+      / (exp(((rpdriver_with_nn_P.IW113_Value[0] * rtb_Sum1_d_idx_0 +
+               rpdriver_with_nn_P.IW113_Value[1] * rtb_Memory1) +
+              rpdriver_with_nn_P.b1_Value[2]) * rpdriver_with_nn_P.Gain_Gain) +
+         rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
+      rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[2]) + (1.0
+      / (exp(((rpdriver_with_nn_P.IW114_Value[0] * rtb_Sum1_d_idx_0 +
+               rpdriver_with_nn_P.IW114_Value[1] * rtb_Memory1) +
+              rpdriver_with_nn_P.b1_Value[3]) * rpdriver_with_nn_P.Gain_Gain) +
+         rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
+      rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[3]) +
+      rpdriver_with_nn_P.b2_Value) + -rpdriver_with_nn_P.mapminmax_reverse_ymin)
+      * ((rpdriver_with_nn_P.mapminmax_reverse_xmax -
+          rpdriver_with_nn_P.mapminmax_reverse_xmin) /
+         (rpdriver_with_nn_P.mapminmax_reverse_ymax -
+          rpdriver_with_nn_P.mapminmax_reverse_ymin)) +
+      rpdriver_with_nn_P.mapminmax_reverse_xmin;
+
+    /* Gain: '<S37>/range y // range x' */
+    rtb_Memory1 = rpdriver_with_nn_P.mapminmax_ymax_h -
+      rpdriver_with_nn_P.mapminmax_ymin_n;
+
+    /* Bias: '<S37>/Add min y' incorporates:
+     *  Bias: '<S37>/Subtract min x'
+     *  Gain: '<S37>/range y // range x'
+     *  Memory: '<Root>/Memory1'
+     */
+    rtb_Sum1_d_idx_0 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax_o[0] -
+      rpdriver_with_nn_P.mapminmax_xmin_f[0]) * (rtb_Memory +
+      -rpdriver_with_nn_P.mapminmax_xmin_f[0]) +
+      rpdriver_with_nn_P.mapminmax_ymin_n;
+    rtb_Memory1 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax_o[1] -
+      rpdriver_with_nn_P.mapminmax_xmin_f[1]) *
+      (rpdriver_with_nn_DW.Memory1_PreviousInput_l +
+       -rpdriver_with_nn_P.mapminmax_xmin_f[1]) +
+      rpdriver_with_nn_P.mapminmax_ymin_n;
+
+    /* Bias: '<S38>/Add min x' incorporates:
+     *  Bias: '<S38>/Subtract min y'
+     *  Constant: '<S24>/b{1}'
+     *  Constant: '<S25>/b{2}'
+     *  Constant: '<S29>/IW{1,1}(1,:)''
+     *  Constant: '<S29>/IW{1,1}(2,:)''
+     *  Constant: '<S30>/one'
+     *  Constant: '<S30>/one1'
+     *  Constant: '<S34>/IW{2,1}(1,:)''
+     *  DotProduct: '<S31>/Dot Product'
+     *  DotProduct: '<S32>/Dot Product'
+     *  DotProduct: '<S36>/Dot Product'
+     *  Gain: '<S30>/Gain'
+     *  Gain: '<S30>/Gain1'
+     *  Gain: '<S38>/Divide by range y'
+     *  Math: '<S30>/Exp'
+     *  Math: '<S30>/Reciprocal'
+     *  Sum: '<S24>/netsum'
+     *  Sum: '<S25>/netsum'
+     *  Sum: '<S30>/Sum'
+     *  Sum: '<S30>/Sum1'
+     *
+     * About '<S30>/Exp':
+     *  Operator: exp
+     *
+     * About '<S30>/Reciprocal':
+     *  Operator: reciprocal
+     */
+    rpdriver_with_nn_B.Addminx_f = ((((1.0 / (exp
+      (((rpdriver_with_nn_P.IW111_Value_g[0] * rtb_Sum1_d_idx_0 +
+         rpdriver_with_nn_P.IW111_Value_g[1] * rtb_Memory1) +
+        rpdriver_with_nn_P.b1_Value_n[0]) * rpdriver_with_nn_P.Gain_Gain_i) +
+      rpdriver_with_nn_P.one_Value_g) * rpdriver_with_nn_P.Gain1_Gain_hd -
+      rpdriver_with_nn_P.one1_Value_m) * rpdriver_with_nn_P.IW211_Value_j[0] +
+      (1.0 / (exp(((rpdriver_with_nn_P.IW112_Value_j[0] * rtb_Sum1_d_idx_0 +
+                    rpdriver_with_nn_P.IW112_Value_j[1] * rtb_Memory1) +
+                   rpdriver_with_nn_P.b1_Value_n[1]) *
+                  rpdriver_with_nn_P.Gain_Gain_i) +
+              rpdriver_with_nn_P.one_Value_g) * rpdriver_with_nn_P.Gain1_Gain_hd
+       - rpdriver_with_nn_P.one1_Value_m) * rpdriver_with_nn_P.IW211_Value_j[1])
+      + rpdriver_with_nn_P.b2_Value_m) +
+      -rpdriver_with_nn_P.mapminmax_reverse_ymin_j) *
+      ((rpdriver_with_nn_P.mapminmax_reverse_xmax_g -
+        rpdriver_with_nn_P.mapminmax_reverse_xmin_e) /
+       (rpdriver_with_nn_P.mapminmax_reverse_ymax_j -
+        rpdriver_with_nn_P.mapminmax_reverse_ymin_j)) +
+      rpdriver_with_nn_P.mapminmax_reverse_xmin_e;
+
+    /* Scope: '<Root>/Scope' */
+    {
+      StructLogVar *svar = (StructLogVar *)
+        rpdriver_with_nn_DW.Scope_PWORK.LoggedData[0];
+      LogVar *var = svar->signals.values;
+
+      /* time */
+      {
+        double locTime = rpdriver_with_nn_M->Timing.t[1];
+        ;
+        rt_UpdateLogVar((LogVar *)svar->time, &locTime, 0);
+      }
+
+      /* signals */
+      {
+        real_T up0[1];
+        up0[0] = rpdriver_with_nn_B.PendulumAnglerad;
+        rt_UpdateLogVar((LogVar *)var, up0, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up1[1];
+        up1[0] = rpdriver_with_nn_B.Addminx;
+        rt_UpdateLogVar((LogVar *)var, up1, 0);
+        var = var->next;
+      }
+
+      {
+        real_T up2[1];
+        up2[0] = rpdriver_with_nn_B.Addminx_f;
+        rt_UpdateLogVar((LogVar *)var, up2, 0);
+      }
+    }
+
+    /* Derivative: '<Root>/Derivative' */
+    rtb_Sum1_d_idx_0 = rpdriver_with_nn_M->Timing.t[0];
+    if ((rpdriver_with_nn_DW.TimeStampA >= rtb_Sum1_d_idx_0) &&
+        (rpdriver_with_nn_DW.TimeStampB >= rtb_Sum1_d_idx_0)) {
+      rpdriver_with_nn_B.Derivative = 0.0;
+    } else {
+      rtb_Memory1 = rpdriver_with_nn_DW.TimeStampA;
+      lastU = &rpdriver_with_nn_DW.LastUAtTimeA;
+      if (rpdriver_with_nn_DW.TimeStampA < rpdriver_with_nn_DW.TimeStampB) {
+        if (rpdriver_with_nn_DW.TimeStampB < rtb_Sum1_d_idx_0) {
+          rtb_Memory1 = rpdriver_with_nn_DW.TimeStampB;
+          lastU = &rpdriver_with_nn_DW.LastUAtTimeB;
+        }
+      } else {
+        if (rpdriver_with_nn_DW.TimeStampA >= rtb_Sum1_d_idx_0) {
+          rtb_Memory1 = rpdriver_with_nn_DW.TimeStampB;
+          lastU = &rpdriver_with_nn_DW.LastUAtTimeB;
+        }
+      }
+
+      rpdriver_with_nn_B.Derivative = (rpdriver_with_nn_B.PendulumVelrads -
+        *lastU) / (rtb_Sum1_d_idx_0 - rtb_Memory1);
+    }
+
+    /* End of Derivative: '<Root>/Derivative' */
+
+    /* MATLAB Function: '<Root>/MATLAB Function' */
+    /* MATLAB Function 'MATLAB Function': '<S1>:1' */
+    /* '<S1>:1:2' */
+    /* '<S1>:1:3' */
+    rpdriver_with_nn_B.Beta_output = (rpdriver_with_nn_B.Derivative - -4.9764 *
+      rpdriver_with_nn_B.PendulumAnglerad) / rpdriver_with_nn_B.PendulumVelrads;
+
+    /* ManualSwitch: '<Root>/Reset Encoders' incorporates:
+     *  Constant: '<Root>/Normal'
+     *  Constant: '<Root>/Reset'
+     */
+    if (rpdriver_with_nn_P.ResetEncoders_CurrentSetting == 1) {
+      rtb_Memory1 = rpdriver_with_nn_P.Reset_Value;
+    } else {
+      rtb_Memory1 = rpdriver_with_nn_P.Normal_Value;
+    }
+
+    /* End of ManualSwitch: '<Root>/Reset Encoders' */
+
+    /* Gain: '<S2>/Gain' */
+    rpdriver_with_nn_B.Gain[0] = rpdriver_with_nn_P.Gain_Gain_d[0] * rtb_Memory1;
+    rpdriver_with_nn_B.Gain[1] = rpdriver_with_nn_P.Gain_Gain_d[1] * rtb_Memory1;
+
+    /* Constant: '<S2>/Prescaler' */
+    rpdriver_with_nn_B.Prescaler = rpdriver_with_nn_P.Prescaler_Value;
+
+    /* Gain: '<S2>/Gain2' */
+    rtb_Memory1 = rpdriver_with_nn_P.Gain2_Gain * rpdriver_with_nn_B.Control;
+
+    /* Saturate: '<S2>/Saturation' */
+    if (rtb_Memory1 > rpdriver_with_nn_P.Saturation_UpperSat_h) {
+      rpdriver_with_nn_B.Saturation = rpdriver_with_nn_P.Saturation_UpperSat_h;
+    } else if (rtb_Memory1 < rpdriver_with_nn_P.Saturation_LowerSat_f) {
+      rpdriver_with_nn_B.Saturation = rpdriver_with_nn_P.Saturation_LowerSat_f;
+    } else {
+      rpdriver_with_nn_B.Saturation = rtb_Memory1;
+    }
+
+    /* End of Saturate: '<S2>/Saturation' */
+
+    /* Constant: '<S2>/ThermFlag' */
+    rpdriver_with_nn_B.ThermFlag = rpdriver_with_nn_P.ThermFlag_Value;
   }
-
-  /* End of ManualSwitch: '<Root>/Reset Encoders1' */
-
-  /* Gain: '<Root>/Gain3' */
-  rpdriver_with_nn_B.Control = rpdriver_with_nn_P.Gain3_Gain * rtb_Memory1;
-
-  /* Scope: '<Root>/PlotState' */
-  {
-    StructLogVar *svar = (StructLogVar *)
-      rpdriver_with_nn_DW.PlotState_PWORK.LoggedData[0];
-    LogVar *var = svar->signals.values;
-
-    /* time */
-    {
-      double locTime = rpdriver_with_nn_M->Timing.t[1];
-      ;
-      rt_UpdateLogVar((LogVar *)svar->time, &locTime, 0);
-    }
-
-    /* signals */
-    {
-      real_T up0[1];
-      up0[0] = rpdriver_with_nn_B.PendulumAnglerad;
-      rt_UpdateLogVar((LogVar *)var, up0, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up1[1];
-      up1[0] = rpdriver_with_nn_B.PendPos_ZeroDown;
-      rt_UpdateLogVar((LogVar *)var, up1, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up2[1];
-      up2[0] = rpdriver_with_nn_B.PendPos_ZeroUp;
-      rt_UpdateLogVar((LogVar *)var, up2, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up3[1];
-      up3[0] = rpdriver_with_nn_B.PendulumVelrads;
-      rt_UpdateLogVar((LogVar *)var, up3, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up4[1];
-      up4[0] = rpdriver_with_nn_B.DCAnglerad;
-      rt_UpdateLogVar((LogVar *)var, up4, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up5[1];
-      up5[0] = rpdriver_with_nn_B.DCVelrads;
-      rt_UpdateLogVar((LogVar *)var, up5, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up6[1];
-      up6[0] = rpdriver_with_nn_B.DCConverttoA1;
-      rt_UpdateLogVar((LogVar *)var, up6, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up7[1];
-      up7[0] = rpdriver_with_nn_B.Control;
-      rt_UpdateLogVar((LogVar *)var, up7, 0);
-    }
-  }
-
-  /* Memory: '<Root>/Memory' */
-  rtb_Memory = rpdriver_with_nn_DW.Memory_PreviousInput_i;
-
-  /* Gain: '<S21>/range y // range x' */
-  rtb_Memory1 = rpdriver_with_nn_P.mapminmax_ymax -
-    rpdriver_with_nn_P.mapminmax_ymin;
-
-  /* Bias: '<S21>/Add min y' incorporates:
-   *  Bias: '<S21>/Subtract min x'
-   *  Gain: '<S21>/range y // range x'
-   *  Memory: '<Root>/Memory1'
-   */
-  rtb_Sum1_d_idx_0 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax[0] -
-    rpdriver_with_nn_P.mapminmax_xmin[0]) * (rtb_Memory +
-    -rpdriver_with_nn_P.mapminmax_xmin[0]) + rpdriver_with_nn_P.mapminmax_ymin;
-  rtb_Memory1 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax[1] -
-    rpdriver_with_nn_P.mapminmax_xmin[1]) *
-    (rpdriver_with_nn_DW.Memory1_PreviousInput_l +
-     -rpdriver_with_nn_P.mapminmax_xmin[1]) + rpdriver_with_nn_P.mapminmax_ymin;
-
-  /* Bias: '<S22>/Add min x' incorporates:
-   *  Bias: '<S22>/Subtract min y'
-   *  Constant: '<S11>/IW{1,1}(1,:)''
-   *  Constant: '<S11>/IW{1,1}(2,:)''
-   *  Constant: '<S11>/IW{1,1}(3,:)''
-   *  Constant: '<S11>/IW{1,1}(4,:)''
-   *  Constant: '<S12>/one'
-   *  Constant: '<S12>/one1'
-   *  Constant: '<S18>/IW{2,1}(1,:)''
-   *  Constant: '<S6>/b{1}'
-   *  Constant: '<S7>/b{2}'
-   *  DotProduct: '<S13>/Dot Product'
-   *  DotProduct: '<S14>/Dot Product'
-   *  DotProduct: '<S15>/Dot Product'
-   *  DotProduct: '<S16>/Dot Product'
-   *  DotProduct: '<S20>/Dot Product'
-   *  Gain: '<S12>/Gain'
-   *  Gain: '<S12>/Gain1'
-   *  Gain: '<S22>/Divide by range y'
-   *  Math: '<S12>/Exp'
-   *  Math: '<S12>/Reciprocal'
-   *  Sum: '<S12>/Sum'
-   *  Sum: '<S12>/Sum1'
-   *  Sum: '<S6>/netsum'
-   *  Sum: '<S7>/netsum'
-   *
-   * About '<S12>/Exp':
-   *  Operator: exp
-   *
-   * About '<S12>/Reciprocal':
-   *  Operator: reciprocal
-   */
-  rpdriver_with_nn_B.Addminx = ((((((1.0 / (exp
-    (((rpdriver_with_nn_P.IW111_Value[0] * rtb_Sum1_d_idx_0 +
-       rpdriver_with_nn_P.IW111_Value[1] * rtb_Memory1) +
-      rpdriver_with_nn_P.b1_Value[0]) * rpdriver_with_nn_P.Gain_Gain) +
-    rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
-    rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[0] + (1.0 /
-    (exp(((rpdriver_with_nn_P.IW112_Value[0] * rtb_Sum1_d_idx_0 +
-           rpdriver_with_nn_P.IW112_Value[1] * rtb_Memory1) +
-          rpdriver_with_nn_P.b1_Value[1]) * rpdriver_with_nn_P.Gain_Gain) +
-     rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
-    rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[1]) + (1.0 /
-    (exp(((rpdriver_with_nn_P.IW113_Value[0] * rtb_Sum1_d_idx_0 +
-           rpdriver_with_nn_P.IW113_Value[1] * rtb_Memory1) +
-          rpdriver_with_nn_P.b1_Value[2]) * rpdriver_with_nn_P.Gain_Gain) +
-     rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
-    rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[2]) + (1.0 /
-    (exp(((rpdriver_with_nn_P.IW114_Value[0] * rtb_Sum1_d_idx_0 +
-           rpdriver_with_nn_P.IW114_Value[1] * rtb_Memory1) +
-          rpdriver_with_nn_P.b1_Value[3]) * rpdriver_with_nn_P.Gain_Gain) +
-     rpdriver_with_nn_P.one_Value) * rpdriver_with_nn_P.Gain1_Gain_g -
-    rpdriver_with_nn_P.one1_Value) * rpdriver_with_nn_P.IW211_Value[3]) +
-    rpdriver_with_nn_P.b2_Value) + -rpdriver_with_nn_P.mapminmax_reverse_ymin) *
-    ((rpdriver_with_nn_P.mapminmax_reverse_xmax -
-      rpdriver_with_nn_P.mapminmax_reverse_xmin) /
-     (rpdriver_with_nn_P.mapminmax_reverse_ymax -
-      rpdriver_with_nn_P.mapminmax_reverse_ymin)) +
-    rpdriver_with_nn_P.mapminmax_reverse_xmin;
-
-  /* Gain: '<S36>/range y // range x' */
-  rtb_Memory1 = rpdriver_with_nn_P.mapminmax_ymax_h -
-    rpdriver_with_nn_P.mapminmax_ymin_n;
-
-  /* Bias: '<S36>/Add min y' incorporates:
-   *  Bias: '<S36>/Subtract min x'
-   *  Gain: '<S36>/range y // range x'
-   *  Memory: '<Root>/Memory1'
-   */
-  rtb_Sum1_d_idx_0 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax_o[0] -
-    rpdriver_with_nn_P.mapminmax_xmin_f[0]) * (rtb_Memory +
-    -rpdriver_with_nn_P.mapminmax_xmin_f[0]) +
-    rpdriver_with_nn_P.mapminmax_ymin_n;
-  rtb_Memory1 = rtb_Memory1 / (rpdriver_with_nn_P.mapminmax_xmax_o[1] -
-    rpdriver_with_nn_P.mapminmax_xmin_f[1]) *
-    (rpdriver_with_nn_DW.Memory1_PreviousInput_l +
-     -rpdriver_with_nn_P.mapminmax_xmin_f[1]) +
-    rpdriver_with_nn_P.mapminmax_ymin_n;
-
-  /* Bias: '<S37>/Add min x' incorporates:
-   *  Bias: '<S37>/Subtract min y'
-   *  Constant: '<S23>/b{1}'
-   *  Constant: '<S24>/b{2}'
-   *  Constant: '<S28>/IW{1,1}(1,:)''
-   *  Constant: '<S28>/IW{1,1}(2,:)''
-   *  Constant: '<S29>/one'
-   *  Constant: '<S29>/one1'
-   *  Constant: '<S33>/IW{2,1}(1,:)''
-   *  DotProduct: '<S30>/Dot Product'
-   *  DotProduct: '<S31>/Dot Product'
-   *  DotProduct: '<S35>/Dot Product'
-   *  Gain: '<S29>/Gain'
-   *  Gain: '<S29>/Gain1'
-   *  Gain: '<S37>/Divide by range y'
-   *  Math: '<S29>/Exp'
-   *  Math: '<S29>/Reciprocal'
-   *  Sum: '<S23>/netsum'
-   *  Sum: '<S24>/netsum'
-   *  Sum: '<S29>/Sum'
-   *  Sum: '<S29>/Sum1'
-   *
-   * About '<S29>/Exp':
-   *  Operator: exp
-   *
-   * About '<S29>/Reciprocal':
-   *  Operator: reciprocal
-   */
-  rpdriver_with_nn_B.Addminx_f = ((((1.0 / (exp
-    (((rpdriver_with_nn_P.IW111_Value_g[0] * rtb_Sum1_d_idx_0 +
-       rpdriver_with_nn_P.IW111_Value_g[1] * rtb_Memory1) +
-      rpdriver_with_nn_P.b1_Value_n[0]) * rpdriver_with_nn_P.Gain_Gain_i) +
-    rpdriver_with_nn_P.one_Value_g) * rpdriver_with_nn_P.Gain1_Gain_hd -
-    rpdriver_with_nn_P.one1_Value_m) * rpdriver_with_nn_P.IW211_Value_j[0] +
-    (1.0 / (exp(((rpdriver_with_nn_P.IW112_Value_j[0] * rtb_Sum1_d_idx_0 +
-                  rpdriver_with_nn_P.IW112_Value_j[1] * rtb_Memory1) +
-                 rpdriver_with_nn_P.b1_Value_n[1]) *
-                rpdriver_with_nn_P.Gain_Gain_i) + rpdriver_with_nn_P.one_Value_g)
-     * rpdriver_with_nn_P.Gain1_Gain_hd - rpdriver_with_nn_P.one1_Value_m) *
-    rpdriver_with_nn_P.IW211_Value_j[1]) + rpdriver_with_nn_P.b2_Value_m) +
-    -rpdriver_with_nn_P.mapminmax_reverse_ymin_j) *
-    ((rpdriver_with_nn_P.mapminmax_reverse_xmax_g -
-      rpdriver_with_nn_P.mapminmax_reverse_xmin_e) /
-     (rpdriver_with_nn_P.mapminmax_reverse_ymax_j -
-      rpdriver_with_nn_P.mapminmax_reverse_ymin_j)) +
-    rpdriver_with_nn_P.mapminmax_reverse_xmin_e;
-
-  /* Scope: '<Root>/Scope' */
-  {
-    StructLogVar *svar = (StructLogVar *)
-      rpdriver_with_nn_DW.Scope_PWORK.LoggedData[0];
-    LogVar *var = svar->signals.values;
-
-    /* time */
-    {
-      double locTime = rpdriver_with_nn_M->Timing.t[1];
-      ;
-      rt_UpdateLogVar((LogVar *)svar->time, &locTime, 0);
-    }
-
-    /* signals */
-    {
-      real_T up0[1];
-      up0[0] = rpdriver_with_nn_B.PendulumAnglerad;
-      rt_UpdateLogVar((LogVar *)var, up0, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up1[1];
-      up1[0] = rpdriver_with_nn_B.Addminx;
-      rt_UpdateLogVar((LogVar *)var, up1, 0);
-      var = var->next;
-    }
-
-    {
-      real_T up2[1];
-      up2[0] = rpdriver_with_nn_B.Addminx_f;
-      rt_UpdateLogVar((LogVar *)var, up2, 0);
-    }
-  }
-
-  /* ManualSwitch: '<Root>/Reset Encoders' incorporates:
-   *  Constant: '<Root>/Normal'
-   *  Constant: '<Root>/Reset'
-   */
-  if (rpdriver_with_nn_P.ResetEncoders_CurrentSetting == 1) {
-    rtb_Memory1 = rpdriver_with_nn_P.Reset_Value;
-  } else {
-    rtb_Memory1 = rpdriver_with_nn_P.Normal_Value;
-  }
-
-  /* End of ManualSwitch: '<Root>/Reset Encoders' */
-
-  /* Gain: '<S1>/Gain' */
-  rpdriver_with_nn_B.Gain[0] = rpdriver_with_nn_P.Gain_Gain_d[0] * rtb_Memory1;
-  rpdriver_with_nn_B.Gain[1] = rpdriver_with_nn_P.Gain_Gain_d[1] * rtb_Memory1;
-
-  /* Constant: '<S1>/Prescaler' */
-  rpdriver_with_nn_B.Prescaler = rpdriver_with_nn_P.Prescaler_Value;
-
-  /* Gain: '<S1>/Gain2' */
-  rtb_Sum1_d_idx_0 = rpdriver_with_nn_P.Gain2_Gain * rpdriver_with_nn_B.Control;
-
-  /* Saturate: '<S1>/Saturation' */
-  if (rtb_Sum1_d_idx_0 > rpdriver_with_nn_P.Saturation_UpperSat_h) {
-    rpdriver_with_nn_B.Saturation = rpdriver_with_nn_P.Saturation_UpperSat_h;
-  } else if (rtb_Sum1_d_idx_0 < rpdriver_with_nn_P.Saturation_LowerSat_f) {
-    rpdriver_with_nn_B.Saturation = rpdriver_with_nn_P.Saturation_LowerSat_f;
-  } else {
-    rpdriver_with_nn_B.Saturation = rtb_Sum1_d_idx_0;
-  }
-
-  /* End of Saturate: '<S1>/Saturation' */
-
-  /* Constant: '<S1>/ThermFlag' */
-  rpdriver_with_nn_B.ThermFlag = rpdriver_with_nn_P.ThermFlag_Value;
 
   /* Matfile logging */
   rt_UpdateTXYLogVars(rpdriver_with_nn_M->rtwLogInfo,
                       (rpdriver_with_nn_M->Timing.t));
 
-  /* Update for Memory: '<S1>/Memory2' */
-  rpdriver_with_nn_DW.Memory2_PreviousInput =
-    rpdriver_with_nn_B.PendulumAnglerad;
+  {
+    real_T *lastU;
 
-  /* Update for Memory: '<S1>/Memory' */
-  rpdriver_with_nn_DW.Memory_PreviousInput = rpdriver_with_nn_B.SFunction_o6;
+    /* Update for Memory: '<S2>/Memory2' */
+    rpdriver_with_nn_DW.Memory2_PreviousInput =
+      rpdriver_with_nn_B.PendulumAnglerad;
 
-  /* Update for Memory: '<S1>/Memory1' */
-  rpdriver_with_nn_DW.Memory1_PreviousInput = rpdriver_with_nn_B.DCAnglerad;
+    /* Update for Memory: '<S2>/Memory' */
+    rpdriver_with_nn_DW.Memory_PreviousInput = rpdriver_with_nn_B.SFunction_o6;
 
-  /* Update for Memory: '<Root>/Memory' */
-  rpdriver_with_nn_DW.Memory_PreviousInput_i =
-    rpdriver_with_nn_B.PendulumAnglerad;
+    /* Update for Memory: '<S2>/Memory1' */
+    rpdriver_with_nn_DW.Memory1_PreviousInput = rpdriver_with_nn_B.DCAnglerad;
 
-  /* Update for Memory: '<Root>/Memory1' */
-  rpdriver_with_nn_DW.Memory1_PreviousInput_l = rtb_Memory;
+    /* Update for Memory: '<Root>/Memory' */
+    rpdriver_with_nn_DW.Memory_PreviousInput_i =
+      rpdriver_with_nn_B.PendulumAnglerad;
+
+    /* Update for Memory: '<Root>/Memory1' */
+    rpdriver_with_nn_DW.Memory1_PreviousInput_l = rtb_Memory;
+
+    /* Update for Derivative: '<Root>/Derivative' */
+    if (rpdriver_with_nn_DW.TimeStampA == (rtInf)) {
+      rpdriver_with_nn_DW.TimeStampA = rpdriver_with_nn_M->Timing.t[0];
+      lastU = &rpdriver_with_nn_DW.LastUAtTimeA;
+    } else if (rpdriver_with_nn_DW.TimeStampB == (rtInf)) {
+      rpdriver_with_nn_DW.TimeStampB = rpdriver_with_nn_M->Timing.t[0];
+      lastU = &rpdriver_with_nn_DW.LastUAtTimeB;
+    } else if (rpdriver_with_nn_DW.TimeStampA < rpdriver_with_nn_DW.TimeStampB)
+    {
+      rpdriver_with_nn_DW.TimeStampA = rpdriver_with_nn_M->Timing.t[0];
+      lastU = &rpdriver_with_nn_DW.LastUAtTimeA;
+    } else {
+      rpdriver_with_nn_DW.TimeStampB = rpdriver_with_nn_M->Timing.t[0];
+      lastU = &rpdriver_with_nn_DW.LastUAtTimeB;
+    }
+
+    *lastU = rpdriver_with_nn_B.PendulumVelrads;
+
+    /* End of Update for Derivative: '<Root>/Derivative' */
+  }
 
   /* External mode */
   rtExtModeUploadCheckTrigger(2);
@@ -634,15 +698,15 @@ void rpdriver_with_nn_initialize(void)
   }
 
   /* External mode info */
-  rpdriver_with_nn_M->Sizes.checksums[0] = (3421656560U);
-  rpdriver_with_nn_M->Sizes.checksums[1] = (1373510660U);
-  rpdriver_with_nn_M->Sizes.checksums[2] = (2302455066U);
-  rpdriver_with_nn_M->Sizes.checksums[3] = (1045884951U);
+  rpdriver_with_nn_M->Sizes.checksums[0] = (820520137U);
+  rpdriver_with_nn_M->Sizes.checksums[1] = (2136940501U);
+  rpdriver_with_nn_M->Sizes.checksums[2] = (2196775533U);
+  rpdriver_with_nn_M->Sizes.checksums[3] = (1805923083U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[7];
+    static const sysRanDType *systemRan[8];
     rpdriver_with_nn_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
@@ -652,6 +716,7 @@ void rpdriver_with_nn_initialize(void)
     systemRan[4] = &rtAlwaysEnabled;
     systemRan[5] = &rtAlwaysEnabled;
     systemRan[6] = &rtAlwaysEnabled;
+    systemRan[7] = &rtAlwaysEnabled;
     rteiSetModelMappingInfoPtr(rpdriver_with_nn_M->extModeInfo,
       &rpdriver_with_nn_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(rpdriver_with_nn_M->extModeInfo,
@@ -730,7 +795,7 @@ void rpdriver_with_nn_initialize(void)
     rpdriver_with_nn_M->childSfunctions[0] =
       (&rpdriver_with_nn_M->NonInlinedSFcns.childSFunctions[0]);
 
-    /* Level2 S-Function Block: rpdriver_with_nn/<S1>/S-Function (rtdacusb2_rpend_dd) */
+    /* Level2 S-Function Block: rpdriver_with_nn/<S2>/S-Function (rtdacusb2_rpend_dd) */
     {
       SimStruct *rts = rpdriver_with_nn_M->childSfunctions[0];
 
@@ -983,8 +1048,8 @@ void rpdriver_with_nn_initialize(void)
     rtmGetTFinal(rpdriver_with_nn_M), rpdriver_with_nn_M->Timing.stepSize0,
     (&rtmGetErrorStatus(rpdriver_with_nn_M)));
 
-  /* Start for S-Function (rtdacusb2_rpend_dd): '<S1>/S-Function' */
-  /* Level2 S-Function Block: '<S1>/S-Function' (rtdacusb2_rpend_dd) */
+  /* Start for S-Function (rtdacusb2_rpend_dd): '<S2>/S-Function' */
+  /* Level2 S-Function Block: '<S2>/S-Function' (rtdacusb2_rpend_dd) */
   {
     SimStruct *rts = rpdriver_with_nn_M->childSfunctions[0];
     sfcnStart(rts);
@@ -1061,7 +1126,7 @@ void rpdriver_with_nn_initialize(void)
       rtmGetTFinal(rpdriver_with_nn_M),
       rpdriver_with_nn_M->Timing.stepSize0,
       (&rtmGetErrorStatus(rpdriver_with_nn_M)),
-      "dane_NN_test2",
+      "dane_NN_liczenie_bety",
       1,
       0,
       1,
@@ -1143,21 +1208,21 @@ void rpdriver_with_nn_initialize(void)
       return;
   }
 
-  /* Start for Constant: '<S1>/Prescaler' */
+  /* Start for Constant: '<S2>/Prescaler' */
   rpdriver_with_nn_B.Prescaler = rpdriver_with_nn_P.Prescaler_Value;
 
-  /* Start for Constant: '<S1>/ThermFlag' */
+  /* Start for Constant: '<S2>/ThermFlag' */
   rpdriver_with_nn_B.ThermFlag = rpdriver_with_nn_P.ThermFlag_Value;
 
-  /* InitializeConditions for Memory: '<S1>/Memory2' */
+  /* InitializeConditions for Memory: '<S2>/Memory2' */
   rpdriver_with_nn_DW.Memory2_PreviousInput =
     rpdriver_with_nn_P.Memory2_InitialCondition;
 
-  /* InitializeConditions for Memory: '<S1>/Memory' */
+  /* InitializeConditions for Memory: '<S2>/Memory' */
   rpdriver_with_nn_DW.Memory_PreviousInput =
     rpdriver_with_nn_P.Memory_InitialCondition;
 
-  /* InitializeConditions for Memory: '<S1>/Memory1' */
+  /* InitializeConditions for Memory: '<S2>/Memory1' */
   rpdriver_with_nn_DW.Memory1_PreviousInput =
     rpdriver_with_nn_P.Memory1_InitialCondition;
 
@@ -1168,13 +1233,17 @@ void rpdriver_with_nn_initialize(void)
   /* InitializeConditions for Memory: '<Root>/Memory1' */
   rpdriver_with_nn_DW.Memory1_PreviousInput_l =
     rpdriver_with_nn_P.Memory1_InitialCondition_f;
+
+  /* InitializeConditions for Derivative: '<Root>/Derivative' */
+  rpdriver_with_nn_DW.TimeStampA = (rtInf);
+  rpdriver_with_nn_DW.TimeStampB = (rtInf);
 }
 
 /* Model terminate function */
 void rpdriver_with_nn_terminate(void)
 {
-  /* Terminate for S-Function (rtdacusb2_rpend_dd): '<S1>/S-Function' */
-  /* Level2 S-Function Block: '<S1>/S-Function' (rtdacusb2_rpend_dd) */
+  /* Terminate for S-Function (rtdacusb2_rpend_dd): '<S2>/S-Function' */
+  /* Level2 S-Function Block: '<S2>/S-Function' (rtdacusb2_rpend_dd) */
   {
     SimStruct *rts = rpdriver_with_nn_M->childSfunctions[0];
     sfcnTerminate(rts);
