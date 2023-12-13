@@ -1,5 +1,6 @@
 %% Train NARX Network and Predict on New Data
-
+clear all
+load("..\..\doc\lab_3\narxnet_workspace.mat")
 %%
 % Partition the training data. Use |Xnew| to do prediction in closed
 % loop mode later.
